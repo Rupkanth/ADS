@@ -1,0 +1,76 @@
+#include<iostream>
+using namespace std;
+// Calculating the failure function & place it in the prefix & suffix table
+void Prefix(char patt[40], int m, int prefArr[40]) 
+{
+   int len = 0;
+   prefArr[0] = 0;     
+   for(int i = 1; i<m; i++) 
+   {
+      if(patt[i] == patt[len]) 
+	  {
+         len++;
+         prefArr[i] = len;    
+      }
+	  else {
+         if(len != 0) 
+		 {
+            len = prefArr[len - 1];
+            i--;     
+         }
+		 else
+            prefArr[i] = 0;
+      }
+   }
+}
+
+void kmp(char mainString[40], char patt[20]) {
+   int n, m, i = 0, j = 0;
+   
+   for(n=0;mainString[n]!='\0';n++); // to find length of mainstring
+   for(m=0;patt[m]!='\0';m++); // to find the length of the pattern
+   
+   int prefixArr[m]; // precomputed table with the values to be skipped   
+   
+   Prefix(patt, m, prefixArr); // preparing failure function & table
+   
+   cout<<"\n The precomputed table is..\n ";
+   for(i=0;i<m;i++)
+     cout<<prefixArr[i]<<" ";
+   
+   cout<<"\n";
+   
+   while(i < n) 
+   {
+      if(mainString[i] == patt[j]) 
+	  {
+         i++; j++;
+      }
+
+      if(j == m) 
+	  {
+             cout<<"Pattern found at "<<i-j<<"\n"; // Here i-j is the starting position of the pattern in the mainstring
+			 return;     
+      }
+	  else 
+	  if((i < n) && (patt[j] != mainString[i])) // if mismatch occurs at jth position
+	  {
+         if(j != 0)
+            j = prefixArr[j-1];// here we consider the number of positions to be skipped
+         else
+            i++;
+      }
+   }
+   cout<<" Sorry...! Pattern not found...!";
+}
+
+int main() {
+   char str[50];
+   char patt[20];
+   cin>>str>>patt;
+   
+   kmp(str, patt);
+}
+
+
+
