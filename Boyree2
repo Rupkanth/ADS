@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+ using namespace std;
+ #define TOTAL_CHARS 256 
+
+ void badMatchTable(string STR, int size, int badcharacter[TOTAL_CHARS])
+ {
+     for (int i = 0; i < TOTAL_CHARS; i++) 
+         badcharacter[i] = 0;
+     
+     for (int i = 0; i < size; i++)
+	   badcharacter[(int)STR[i]] = i;
+ }
+ 
+ void BoyerMoore_Search(string text, string pattern)
+ {
+     int m = pattern.size();
+     int n = text.size();
+     int badcharacter[TOTAL_CHARS];
+
+     badMatchTable(pattern, m, badcharacter); 
+     int shift = 0;
+
+     while (shift <= (n - m)) 
+     {
+         int j = m - 1;
+
+         while (j >= 0 && pattern[j] == text[shift + j]) 
+             j--;
+
+         if (j < 0) 
+         {
+	        cout <<pattern<< " occurs at position = " << shift << endl;
+	        return;
+	     }
+         else
+
+            
+             shift += max(1, j - badcharacter[text[shift + j]]);
+             
+     }
+ }
+ 
+
+ 
+ int main()
+ {
+     //string text = "aabaabbbbcabbbacbabba";
+     //string pattern = "abbba";
+     //BoyerMoore_Search(text, pattern);
+     char text[30];
+     char patt[20];
+     cin>>text>>patt;
+     BoyerMoore_Search(text,patt);
+     return 0;
+ }
+
+
+
+
